@@ -24,7 +24,7 @@ export class MovieProvider {
   }
 
   private getApiKey() :string {
-    this.apiKey = "0a6fbecc00fac9f381da717b546d640c";
+    this.apiKey = "";
     return this.apiKey;
   }
 

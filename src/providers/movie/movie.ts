@@ -13,7 +13,7 @@ export class MovieProvider {
   private apiKey: string = "";
 
   constructor(public http: Http) {
-    console.log('Hello MovieProvider Provider');
+
   }
 
   getLatestMovies(){

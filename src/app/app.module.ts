@@ -4,8 +4,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HttpModule } from '@angular/http';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -14,12 +12,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { FeedPageModule } from '../pages/feed/feed.module';
 import { IntroPageModule } from '../pages/intro/intro.module';
 import { MovieProvider } from '../providers/movie/movie';
+import { SettingsPageModule } from '../pages/settings/settings.module';
+import { AboutPageModule } from '../pages/about/about.module';
+import { ProfilePageModule } from '../pages/profile/profile.module';
+import { MovieDetailsPageModule } from '../pages/movie-details/movie-details.module';
 
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
     TabsPage
   ],
@@ -28,13 +28,15 @@ import { MovieProvider } from '../providers/movie/movie';
     FeedPageModule,
     IntroPageModule,
     IonicModule.forRoot(MyApp),
-    HttpModule
+    HttpModule,
+    SettingsPageModule,
+    AboutPageModule,
+    ProfilePageModule,
+    MovieDetailsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
     TabsPage
   ],

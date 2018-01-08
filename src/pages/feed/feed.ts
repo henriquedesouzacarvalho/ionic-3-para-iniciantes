@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { MovieProvider } from '../../providers/movie/movie';
 
 /**
@@ -25,19 +25,46 @@ export class FeedPage {
   }
 
   public movieList = new Array<any>();
+  public loader;
+  public refresher;
+  public isRefreshing: boolean = false;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private movieProvider: MovieProvider
+    private movieProvider: MovieProvider,
+    public loadingCtrl: LoadingController
   ) { }
+
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Loading..."
+      // , duration: 3000
+    });
+    this.loader.present();
+  }
+
+  closeLoading() {
+    this.loader.dismiss();
+  }
 
   public somaDoisNumeros(): void {
     // alert("Sono da porra");
   }
 
-  ionViewDidLoad() {
-    // this.somaDoisNumeros();
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    this.isRefreshing = true;
+    this.loadMovies();
+  }
+
+  // ionViewDidLoad() { }
+  ionViewDidEnter() {
+    this.loadMovies();
+  }
+
+  loadMovies() {
+        // this.somaDoisNumeros();
     // console.log('ionViewDidLoad FeedPage');
     /*******************************************************
     this.movieProvider.getLatestMovies().subscribe(data => {
@@ -46,14 +73,22 @@ export class FeedPage {
       console.log(error);
     })
     ********************************************************/
-
+    this.presentLoading();
     this.movieProvider.getPopularMovies().subscribe(data => {
       this.movieList = JSON.parse((data as any)._body).results;
-      console.log(this.movieList);
+      if (this.isRefreshing) {
+        this.refresher.complete();
+        this.isRefreshing = false;
+      }
+      this.closeLoading();
     }, error => {
       console.log(error);
-    })
-
+      if (this.isRefreshing) {
+        this.refresher.complete();
+        this.isRefreshing = false;
+      }
+      this.closeLoading();
+    });
   }
 
 }

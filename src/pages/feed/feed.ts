@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { MovieProvider } from '../../providers/movie/movie';
+import { MovieDetailsPage } from '../movie-details/movie-details';
 
 /**
  * Generated class for the FeedPage page.
@@ -25,9 +26,12 @@ export class FeedPage {
   }
 
   public movieList = new Array<any>();
+  public page = 1;
   public loader;
   public refresher;
   public isRefreshing: boolean = false;
+  public infiniteScroll;
+
 
   constructor(
     public navCtrl: NavController,
@@ -63,7 +67,7 @@ export class FeedPage {
     this.loadMovies();
   }
 
-  loadMovies() {
+  loadMovies(newPage:boolean = false) {
         // this.somaDoisNumeros();
     // console.log('ionViewDidLoad FeedPage');
     /*******************************************************
@@ -74,8 +78,16 @@ export class FeedPage {
     })
     ********************************************************/
     this.presentLoading();
-    this.movieProvider.getPopularMovies().subscribe(data => {
-      this.movieList = JSON.parse((data as any)._body).results;
+    this.movieProvider.getPopularMovies(this.page).subscribe(data => {
+      const results = JSON.parse((data as any)._body).results;
+
+      if (newPage) {
+        this.movieList = this.movieList.concat(results);
+        this.infiniteScroll.complete();
+      } else {
+        this.movieList = results
+      }
+
       if (this.isRefreshing) {
         this.refresher.complete();
         this.isRefreshing = false;
@@ -89,6 +101,16 @@ export class FeedPage {
       }
       this.closeLoading();
     });
+  }
+
+  openDetail(movie){
+    this.navCtrl.push(MovieDetailsPage, {id: movie.id });
+  }
+
+  doInfinite(infiniteScroll) {
+    this.page++;
+    this.infiniteScroll = infiniteScroll;
+    this.loadMovies(true);
   }
 
 }

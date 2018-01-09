@@ -12,5 +12,6 @@
 
 
 <ion-content padding>
-
+  <img *ngIf="img" [src]="img" alt=""> <!-- [scr] -> bind preenchida por variável -> ngIf aparece somente quando a imagem está preenchida. -->
+  <button ion-button block (click)="takePicture()">Take picture</button>
 </ion-content>
